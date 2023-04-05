@@ -4,7 +4,7 @@ import {Op} from "sequelize";
 export const getUsers = async(req, res) =>{
     const page = parseInt(req.query.page) || 0;
     const limit = parseInt(req.query.limit) || 10;
-    const search = req.query.search || 0;
+    const search = req.query.search_query || "";
     const offset = limit * page;
     const totalRows = await User.count({
         where: {
@@ -27,7 +27,7 @@ export const getUsers = async(req, res) =>{
         offset: offset,
         limit : limit,
         order : [
-            ['id', 'DESC']
+            ['id', 'ASC']
         ]
     });
     res.json({

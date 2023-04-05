@@ -9,10 +9,13 @@ const UserList = () => {
     const [pages, setPages] = useState(0);
     const [rows, setRows] = useState(0);
     const [keyword, setKeyWords] = useState("");
+    const [query, setQuery] = useState("");
 
     useEffect(() => {
         getUsers();
     }, [page, keyword]);
+
+
     const getUsers = async () => {
         const response = await axios.get(
             `http://localhost:5000/users?search_query=${keyword}&page=${page}&limit=${limit}`
@@ -27,23 +30,29 @@ const UserList = () => {
         setPage(selected);
     };
 
+    const searchData = (e) => {
+        e.preventDefault();
+        setPage(0);
+        setKeyWords(query);
+    };
+
     return (
         <div className="container mt-5">
             <div className="columns">
                 <div className="column is-centered">
-                    <form>
+                    <form onSubmit={searchData}>
                         <div className="field has-addons">
                             <div className="control is-expanded">
                                 <input
                                     type="text"
                                     className="input"
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
                                     placeholder="Find something here..."
                                 />
                             </div>
                             <div className="control">
-                                <button
-                                    type="submit"
-                                    className="button is-info">
+                                <button type="submit" className="button is-info">
                                     Search
                                 </button>
                             </div>
@@ -84,6 +93,10 @@ const UserList = () => {
                             onPageChange={changePage}
                             containerClassName={"pagination-list"}
                             pageLinkClassName={"pagination-link"}
+                            previousLinkClassName={"pagination-previous"}
+                            nextLinkClassName={"pagination-next"}
+                            activeLinkClassName={"pagination-link is-current"}
+                            disabledLinkClassName={"pagination-link is-disabled"}
                         />
                     </nav>
                 </div>
